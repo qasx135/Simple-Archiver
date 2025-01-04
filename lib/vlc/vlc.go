@@ -21,7 +21,7 @@ func Encode(str string) string {
 	// encode to binary: some text -> 01010101
 	bStr := encodeBin(str)
 	// split binary by chunks (8): bits to bytes -> '01010101 01010101 01010101'
-	chunks := splitByChanks(bStr, chunkSize)
+	chunks := splitByChunks(bStr, chunkSize)
 	fmt.Println(chunks)
 	// bytes to hex -> '20 30 3C'ь
 	// return hexChunksStr
@@ -68,7 +68,7 @@ func bin(ch rune) string {
 }
 
 func encodingTable() EncodingTable {
-	return EncodingTable {
+	return EncodingTable{
 		' ': "11",
 		't': "1001",
 		'n': "10000",
@@ -100,25 +100,25 @@ func encodingTable() EncodingTable {
 	}
 }
 
-// splitByChanks splits binary string by chunks with given size
+// splitByChunks splits binary string by chunks with given size
 // i.g. '100101011001010110010101' -> '10010101 10010101 10010101'
-func splitByChanks(bStr string, chunkSize int) BinaryChunks {
+func splitByChunks(bStr string, chunkSize int) BinaryChunks {
 	strLen := utf8.RuneCountInString(bStr)
 
 	chunksCount := strLen / chunkSize
 
-	if strLen / chunkSize != 0 {
+	if strLen/chunkSize != 0 {
 		chunksCount++
 	}
 
 	res := make(BinaryChunks, 0, chunksCount)
 
 	var buf strings.Builder
-	
+
 	for i, ch := range bStr {
 		buf.WriteString(string(ch))
 
-		if (i + 1) % chunkSize == 0 {
+		if (i+1)%chunkSize == 0 {
 			res = append(res, BinaryChunk(buf.String()))
 			buf.Reset()
 		}
@@ -126,7 +126,7 @@ func splitByChanks(bStr string, chunkSize int) BinaryChunks {
 
 	if buf.Len() != 0 {
 		lastChunk := buf.String()
-		lastChunk += strings.Repeat("0", chunkSize - len(lastChunk))
+		lastChunk += strings.Repeat("0", chunkSize-len(lastChunk))
 		res = append(res, BinaryChunk(lastChunk))
 	}
 
