@@ -5,89 +5,6 @@ import (
 	"testing"
 )
 
-func TestNewHexChunks(t *testing.T) {
-	tests := []struct {
-		name string
-		str  string
-		want HexChunks
-	}{
-		{
-			name: "base test",
-			str:  "20 30 3C 18",
-			want: HexChunks{"20", "30", "3C", "18"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, NewHexChunks(tt.str), "NewHexChunks(%v)", tt.str)
-		})
-	}
-}
-
-func TestNewHexChunks1(t *testing.T) {
-	tests := []struct {
-		name string
-		str  string
-		want HexChunks
-	}{
-		// TODO: Add test cases.
-		{
-			name: "base test",
-			str:  "20 30 3C 18",
-			want: HexChunks{"20", "30", "3C", "18"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, NewHexChunks(tt.str), "NewHexChunks(%v)", tt.str)
-		})
-	}
-}
-
-func TestHexChunk_ToBinary(t *testing.T) {
-	tests := []struct {
-		name string
-		hc   HexChunk
-		want BinaryChunk
-	}{
-		// TODO: Add test cases.
-		{
-			name: "base test",
-			hc:   HexChunk("2F"),
-			want: BinaryChunk("00101111"),
-		},
-		{
-			name: "base test 2",
-			hc:   HexChunk("80"),
-			want: BinaryChunk("10000000"),
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, tt.hc.ToBinary(), "ToBinary()")
-		})
-	}
-}
-
-func TestHexChunks_ToBinary(t *testing.T) {
-	tests := []struct {
-		name string
-		hcs  HexChunks
-		want BinaryChunks
-	}{
-		{
-			name: "base test",
-			hcs:  HexChunks{"2F", "80"},
-			want: BinaryChunks{"00101111", "10000000"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, tt.hcs.ToBinary(), "ToBinary()")
-		})
-	}
-}
-
 func TestBinaryChunks_Join(t *testing.T) {
 	tests := []struct {
 		name string
@@ -104,6 +21,34 @@ func TestBinaryChunks_Join(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, tt.bcs.Join(), "Join()")
+		})
+	}
+}
+
+func TestSplitByChunks(t *testing.T) {
+	inputString := "00100000100110001001001"
+	expected := BinaryChunks{"00100000", "10011000", "10010010"}
+	actual := splitByChunks(inputString, 8)
+
+	assert.Equal(t, expected, actual)
+}
+
+func TestNewBinChunks(t *testing.T) {
+	tests := []struct {
+		name string
+		data []byte
+		want BinaryChunks
+	}{
+		// TODO: Add test cases.
+		{
+			name: "base test",
+			data: []byte{20, 30, 60, 18},
+			want: BinaryChunks{"00010100", "00011110", "00111100", "00010010"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, NewBinChunks(tt.data), "NewBinChunks(%v)", tt.data)
 		})
 	}
 }

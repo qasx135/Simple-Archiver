@@ -6,7 +6,7 @@ import (
 	"unicode"
 )
 
-func Encode(str string) string {
+func Encode(str string) []byte {
 	// prepare text: M -> !m
 	str = prepareText(str)
 
@@ -19,16 +19,12 @@ func Encode(str string) string {
 
 	// bytes to hex -> '20 30 3C'ь
 	// return hexChunksStr
-	return chunks.ToHex().ToString()
+	return chunks.Bytes()
 }
 
-func Decode(encodedText string) string {
-	// hex chunks -> binary chunks
-	hChunks := NewHexChunks(encodedText)
-	bChunks := hChunks.ToBinary()
-
+func Decode(encodedData []byte) string {
 	// bChunks -> binary string
-	bString := bChunks.Join()
+	bString := NewBinChunks(encodedData).Join()
 
 	// build decoding tree
 	dTree := encodingTable().DecodingTree()
